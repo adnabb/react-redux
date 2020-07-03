@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './index.css';
 import App from './App';
@@ -12,23 +13,19 @@ function reducer(state, action) {
 
   if (action.type === 'add') return {
     num: state.num + action.payload
-  }
+  };
 
   return state;
 }
 const store = createStore(reducer);
-function render () {
-  ReactDOM.render(
-    <React.StrictMode>
-      <App store={store}/>
-    </React.StrictMode>,
-    document.getElementById('root')
-  );
-}
-
-render()
-
-store.subscribe(render)
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

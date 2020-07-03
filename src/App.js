@@ -1,52 +1,49 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import './App.css';
 
 function App(props) {
-  const store = props.store;
 
   return (
     <div className="App">
-      <span>{store.getState().num}</span>
-      <button onClick={() => { add1(store); }}>+1</button>
-      <button onClick={() => { add2(store); }}>+2</button>
-      <button onClick={() => { addOdd(store); }}>单数+1</button>
-      <button onClick={() => { addAfter2Sec(store); }}>异步两秒后+1</button>
+      <span>{ props.num}</span>
+      <button onClick={() => { props.add(1) }}>+1</button>
+      <button onClick={() => { props.add(1) }}>+2</button>
+      <button onClick={() => { addOdd(props); }}>单数+1</button>
+      <button onClick={() => { addAfter2Sec(props); }}>异步两秒后+1</button>
     </div>
   );
 }
 
-function add1(store) {
-  store.dispatch({
-    type: 'add',
-    payload: 1
-  });
-}
 
 
-function add2(store) {
-  store.dispatch({
-    type: 'add',
-    payload: 2
-  });
-}
-
-
-function addOdd(store) {
-  if (store.getState().num % 2 === 1) {
-    store.dispatch({
-      type: 'add',
-      payload: 1
-    });
+function addOdd(props) {
+  if (props.num % 2 === 1) {
+    props.add(1)
   }
 }
 
-function addAfter2Sec(store) {
+function addAfter2Sec(props) {
   setTimeout(() => {
-    store.dispatch({
-      type: 'add',
-      payload: 1
-    });
+    props.add(1)
   }, 2000);
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    num: state.num
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return ({
+    add: (num) => {
+      dispatch({
+        type: 'add',
+        payload: num
+      })
+    }
+  })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
